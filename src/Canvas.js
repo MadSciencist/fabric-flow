@@ -174,7 +174,6 @@ const Canvas = () => {
         parentId: node.parentId,
       });
       fabricCanvas.add(ret);
-      fabricCanvas.bringToFront(ret);
       return ret;
     };
 
@@ -182,14 +181,14 @@ const Canvas = () => {
       if (node.superType === "node") {
         mapToTask(node);
       } else if (node.superType === "subProcess") {
-        fabricCanvas.add(
-          new SubProcess({
-            id: node.id,
-            top: node.properties.top,
-            left: node.properties.left,
-            children: node.children.map((x) => mapToTask(x)),
-          })
-        );
+        const subProc = new SubProcess({
+          id: node.id,
+          top: node.properties.top,
+          left: node.properties.left,
+          children: node.children.map((x) => mapToTask(x)),
+        });
+        fabricCanvas.add(subProc);
+        fabricCanvas.sendToBack(subProc);
       }
     });
   };
