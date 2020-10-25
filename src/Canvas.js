@@ -174,6 +174,7 @@ const Canvas = () => {
         parentId: node.parentId,
       });
       fabricCanvas.add(ret);
+      fabricCanvas.bringToFront(ret);
       return ret;
     };
 
