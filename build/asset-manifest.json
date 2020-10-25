@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/fabric-flow/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/fabric-flow/static/js/main.098cd302.chunk.js",
+    "main.js.map": "/fabric-flow/static/js/main.098cd302.chunk.js.map",
+    "runtime-main.js": "/fabric-flow/static/js/runtime-main.75f73da1.js",
+    "runtime-main.js.map": "/fabric-flow/static/js/runtime-main.75f73da1.js.map",
+    "static/js/2.383ab5ed.chunk.js": "/fabric-flow/static/js/2.383ab5ed.chunk.js",
+    "static/js/2.383ab5ed.chunk.js.map": "/fabric-flow/static/js/2.383ab5ed.chunk.js.map",
+    "index.html": "/fabric-flow/index.html",
+    "static/css/main.6dea0f05.chunk.css.map": "/fabric-flow/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.383ab5ed.chunk.js.LICENSE.txt": "/fabric-flow/static/js/2.383ab5ed.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.75f73da1.js",
+    "static/js/2.383ab5ed.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.098cd302.chunk.js"
+  ]
+}
