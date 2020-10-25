@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { fabric } from "fabric";
-import { groupNode, taskNode } from "./Node";
+import { SubProcess, Node } from "./Node";
+import { v4 } from "uuid";
 
 const Canvas = () => {
   const containerRef = useRef(null);
@@ -18,12 +19,28 @@ const Canvas = () => {
 
     const fabricCanvas = new fabric.Canvas("canvasId", canvasOption);
 
-    groupNode.addChild(taskNode);
-    fabricCanvas.add(taskNode);
-    fabricCanvas.add(groupNode);
-
-    window.node1 = taskNode;
-    window.node2 = groupNode;
+    fabricCanvas.add(
+      new Node({
+        id: "task1",
+        top: 100,
+        left: 100,
+        fill: "red",
+        hasControls: true,
+        hasRotatingPoint: false,
+      })
+    );
+    fabricCanvas.add(
+      new SubProcess({
+        id: "process1",
+        top: 200,
+        left: 200,
+        stroke: "black",
+        strokeWidth: 10,
+        fill: "rgba(0,0,0,0)",
+        hasControls: true,
+        hasRotatingPoint: false,
+      })
+    );
 
     window.canvas = fabricCanvas;
     setCanvas(fabricCanvas);
@@ -64,6 +81,7 @@ const Canvas = () => {
       fabricCanvas.forEachObject(function (obj) {
         if (obj === ev.target) return;
         if (obj.superType === "subProcess") {
+          /* start: border color when entering subProcess */
           const subProcess = obj;
           fabricCanvas.bringToFront(ev.target);
           const color = ev.target.intersectsWithObject(subProcess)
@@ -71,7 +89,39 @@ const Canvas = () => {
             : "black";
           subProcess._objects[0].set("stroke", color);
           fabricCanvas.renderAll();
+          /* end: border color when entering subProcess */
+
+          /* start: remove task from subProcess when not intersecting */
+          if (!ev.target.intersectsWithObject(subProcess)) {
+            subProcess.removeChild(ev.target);
+          }
+          /* end: remove task from subProcess when not intersecting */
+
+          /* start: limit task movement withing the group */
+          if (
+            ev.target.superType === "node" &&
+            ev.target.intersectsWithObject(subProcess)
+          ) {
+            const task = ev.target;
+
+            const topBound = subProcess.top;
+            const bottomBound = topBound + subProcess.height;
+            const leftBound = subProcess.left;
+            const rightBound = leftBound + subProcess.width;
+
+            subProcess.addChild(task);
+
+            task.left = Math.min(
+              Math.max(task.left, leftBound),
+              rightBound - task.width
+            );
+            task.top = Math.min(
+              Math.max(task.top, topBound),
+              bottomBound - task.height
+            );
+          }
         }
+        /* end: remove task from subProcess when not intersecting */
       });
     }
   }, []);
@@ -85,6 +135,22 @@ const Canvas = () => {
   return (
     <div>
       <button onClick={handleExport}>Serialize</button>
+      <button
+        onClick={() => {
+          fabricCanvas.add(
+            new Node({
+              id: v4(),
+              top: 50,
+              left: 50,
+              fill: "red",
+              hasControls: true,
+              hasRotatingPoint: false,
+            })
+          );
+        }}
+      >
+        Add Task
+      </button>
       <div
         ref={containerRef}
         style={{ width: 700, height: 700, border: "1px solid gray" }}

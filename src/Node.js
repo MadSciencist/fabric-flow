@@ -1,7 +1,7 @@
 import { fabric } from "fabric";
 import { v4 } from "uuid";
 
-const Node = fabric.util.createClass(fabric.Group, {
+export const Node = fabric.util.createClass(fabric.Group, {
   type: "node",
   superType: "node",
   initialize(options) {
@@ -49,7 +49,7 @@ const Node = fabric.util.createClass(fabric.Group, {
   },
 });
 
-const SubProcess = fabric.util.createClass(fabric.Group, {
+export const SubProcess = fabric.util.createClass(fabric.Group, {
   type: "subProcess",
   superType: "subProcess",
   children: [],
@@ -98,28 +98,10 @@ const SubProcess = fabric.util.createClass(fabric.Group, {
       this.children.push(child);
     }
   },
+  removeChild(child) {
+    fabric.util.removeFromArray(this.children, child);
+  },
   _render(ctx) {
     this.callSuper("_render", ctx);
   },
-});
-
-export const taskNode = new Node({
-  id: "task1",
-  top: 100,
-  left: 100,
-  fill: "red",
-  hasControls: true,
-  hasRotatingPoint: false,
-});
-
-export const groupNode = new SubProcess({
-  id: "process1",
-  top: 200,
-  left: 200,
-  //strokeDashArray: [10, 10],
-  stroke: "black",
-  strokeWidth: 10,
-  fill: "rgba(0,0,0,0)",
-  hasControls: true,
-  hasRotatingPoint: false,
 });
