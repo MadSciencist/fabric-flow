@@ -127,14 +127,76 @@ const Canvas = () => {
   }, []);
 
   const handleExport = () => {
-    const obj = fabricCanvas.toObject().objects;
-    console.log(obj);
-    console.log(obj.map((x) => x.id));
+    const { objects } = fabricCanvas.toObject();
+    const nodes = [];
+
+    const mapObjectToNode = (object) => {
+      const node = {
+        id: object.id,
+        superType: object.superType,
+        parentId: object.parentId,
+        properties: {
+          left: object.left,
+          top: object.top,
+        },
+      };
+      if (object.children) {
+        node.children = object.children?.map((child) => mapObjectToNode(child));
+      }
+
+      return node;
+    };
+
+    objects.forEach((object) => {
+      if (object.superType === "node" || object.superType === "subProcess") {
+        if (!object.parentId) {
+          // we care just about top level object - others will be added recursively
+          nodes.push(mapObjectToNode(object));
+        }
+      }
+    });
+
+    window.nodes = nodes;
+    console.log(nodes);
+  };
+
+  const loadSnapshop = () => {
+    console.log("loading", window.nodes);
+    if (!window.nodes) return;
+    fabricCanvas.clear();
+
+    const mapToTask = (node) => {
+      let ret = new Node({
+        id: node.id,
+        top: node.properties.top,
+        left: node.properties.left,
+        fill: "red",
+        parentId: node.parentId,
+      });
+      fabricCanvas.add(ret);
+      return ret;
+    };
+
+    window.nodes.forEach((node) => {
+      if (node.superType === "node") {
+        mapToTask(node);
+      } else if (node.superType === "subProcess") {
+        fabricCanvas.add(
+          new SubProcess({
+            id: node.id,
+            top: node.properties.top,
+            left: node.properties.left,
+            children: node.children.map((x) => mapToTask(x)),
+          })
+        );
+      }
+    });
   };
 
   return (
     <div>
       <button onClick={handleExport}>Serialize</button>
+      <button onClick={loadSnapshop}>Load snapshop</button>
       <button
         onClick={() => {
           fabricCanvas.add(

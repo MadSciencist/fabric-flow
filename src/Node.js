@@ -4,6 +4,7 @@ import { v4 } from "uuid";
 export const Node = fabric.util.createClass(fabric.Group, {
   type: "node",
   superType: "node",
+  parentId: null,
   initialize(options) {
     options = options || {};
     let name = "Default Node";
@@ -42,6 +43,8 @@ export const Node = fabric.util.createClass(fabric.Group, {
   toObject() {
     return fabric.util.object.extend(this.callSuper("toObject"), {
       id: this.get("id"),
+      superType: this.get("superType"),
+      parentId: this.get("parentId"),
     });
   },
   _render(ctx) {
@@ -55,6 +58,7 @@ export const SubProcess = fabric.util.createClass(fabric.Group, {
   children: [],
   initialize(options) {
     options = options || {};
+    this.children = options.children || [];
     let name = "Default Node";
     this.label = new fabric.Text(name || "Default Node", {
       fontSize: 16,
@@ -90,15 +94,18 @@ export const SubProcess = fabric.util.createClass(fabric.Group, {
   toObject() {
     return fabric.util.object.extend(this.callSuper("toObject"), {
       id: this.get("id"),
-      children: this.get("children"),
+      superType: this.get("superType"),
+      children: this.get("children").map((x) => x.toObject()),
     });
   },
   addChild(child) {
     if (!this.children.includes(child)) {
+      child.set("parentId", this.id);
       this.children.push(child);
     }
   },
   removeChild(child) {
+    child.set("parentId", null);
     fabric.util.removeFromArray(this.children, child);
   },
   _render(ctx) {
