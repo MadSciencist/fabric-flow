@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/fabric-flow/static/css/main.6dea0f05.chunk.css",
-    "main.js": "/fabric-flow/static/js/main.08f732aa.chunk.js",
-    "main.js.map": "/fabric-flow/static/js/main.08f732aa.chunk.js.map",
+    "main.js": "/fabric-flow/static/js/main.223c4cc3.chunk.js",
+    "main.js.map": "/fabric-flow/static/js/main.223c4cc3.chunk.js.map",
     "runtime-main.js": "/fabric-flow/static/js/runtime-main.75f73da1.js",
     "runtime-main.js.map": "/fabric-flow/static/js/runtime-main.75f73da1.js.map",
     "static/js/2.fbb21a11.chunk.js": "/fabric-flow/static/js/2.fbb21a11.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.75f73da1.js",
     "static/js/2.fbb21a11.chunk.js",
     "static/css/main.6dea0f05.chunk.css",
-    "static/js/main.08f732aa.chunk.js"
+    "static/js/main.223c4cc3.chunk.js"
   ]
 }
